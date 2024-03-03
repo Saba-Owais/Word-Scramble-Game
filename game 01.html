@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rock Paper Scissors</title>
+<style>
+  body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    text-align: center;
+    background-color: black;
+  }
+  h1 {
+    color: maroon;
+  }
+  #score {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  .score-box {
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 150px;
+    border: 2px solid #333;
+    transition: transform 0.3s ease-in-out;
+  }
+  .score-box:hover {
+    transform: scale(1.05);
+  }
+  .inner-box {
+    background-color: black;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+  }
+  .choice-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  .choice {
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+    position: relative;
+  }
+  .choice:hover {
+    transform: scale(1.1);
+  }
+  .choice-name {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    color: white;
+  }
+  #result {
+    margin-top: 20px;
+    font-size: 20px;
+    color: white;
+  }
+  #reset-btn {
+    background-color: maroon;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+    margin-top: 20px;
+  }
+  #reset-btn:hover {
+    transform: scale(1.05);
+  }
+
+  
+  @keyframes blink {
+    0% { color: white; }
+    50% { color: yellow; }
+    100% { color: white; }
+  }
+  .blink-animation {
+    animation: blink 0.8s infinite alternate;
+  }
+</style>
+</head>
+<body>
+<h1>Rock Paper Scissors</h1>
+<div id="score">
+  <div class="score-box" id="player-score">
+    <div class="inner-box">Your Score: <span id="player-score-value">0</span></div>
+  </div>
+  <div class="score-box" id="computer-score">
+    <div class="inner-box">Computer Score: <span id="computer-score-value">0</span></div>
+  </div>
+</div>
+<div class="choice-container">
+  <div class="choice" onclick="playGame('rock')">
+    <img src="https://emojicdn.elk.sh/👊" alt="Rock" width="100">
+    <div class="choice-name">Rock</div>
+  </div>
+  <div class="choice" onclick="playGame('paper')">
+    <img src="https://emojicdn.elk.sh/✋" alt="Paper" width="100">
+    <div class="choice-name">Paper</div>
+  </div>
+  <div class="choice" onclick="playGame('scissors')">
+    <img src="https://emojicdn.elk.sh/✌️" alt="Scissors" width="100">
+    <div class="choice-name">Scissors</div>
+  </div>
+</div>
+<p id="result"></p>
+<button id="reset-btn" onclick="resetGame()">Reset All Scores</button>
+
+<script>
+  let playerScore = 0;
+  let computerScore = 0;
+
+  function computerChoice() {
+    const choices = ['rock', 'paper', 'scissors'];
+    const randomIndex = Math.floor(Math.random() * choices.length);
+    return choices[randomIndex];
+  }
+
+  function playGame(playerChoice) {
+    const computerChoiceResult = computerChoice();
+    let result = '';
+
+    if (playerChoice === computerChoiceResult) {
+      result = "It's a tie! 😐";
+    } else if (
+      (playerChoice === 'rock' && computerChoiceResult === 'scissors') ||
+      (playerChoice === 'paper' && computerChoiceResult === 'rock') ||
+      (playerChoice === 'scissors' && computerChoiceResult === 'paper')
+    ) {
+      result = 'You win! 😃';
+      playerScore++;
+    } else {
+      result = 'Computer wins! 😔';
+      computerScore++;
+    }
+
+    const resultElement = document.getElementById('result');
+    resultElement.innerText = `You chose ${playerChoice}. Computer chose ${computerChoiceResult}. ${result}`;
+    if (result === 'You win! 😃') {
+      resultElement.classList.add('blink-animation');
+      setTimeout(() => {
+        resultElement.classList.remove('blink-animation');
+      }, 3000); 
+    }
+
+    document.getElementById('player-score-value').innerText = playerScore;
+    document.getElementById('computer-score-value').innerText = computerScore;
+  }
+
+  function resetGame() {
+    playerScore = 0;
+    computerScore = 0;
+    document.getElementById('player-score-value').innerText = playerScore;
+    document.getElementById('computer-score-value').innerText = computerScore;
+    document.getElementById('result').innerText = '';
+  }
+</script>
+</body>
+</html>
